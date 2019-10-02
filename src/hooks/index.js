@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export const useLocalStorage = (key, initialValue) => {
   const [storedValue, setStoredValue] = useState(() => {
-    const value = localStorage.getItem('key');
+    const value = localStorage.getItem(key);
     return value ? JSON.parse(value) : initialValue;
   });
 
@@ -11,7 +11,7 @@ export const useLocalStorage = (key, initialValue) => {
     localStorage.setItem(key, JSON.stringify(value));
   }
 
-  return [storedValue, setStoredValue];
+  return [storedValue, setValue];
 }
 
 export const useDarkMode = () => {
@@ -20,5 +20,10 @@ export const useDarkMode = () => {
     document.body.classList.toggle('dark-mode')
     setIsdark(!isDark);
   }
+  useEffect(() => {
+    isDark
+      ? document.body.classList.add('dark-mode')
+      : document.body.classList.remove('dark-mode');
+  }, [isDark])
   return [isDark, toggleDark];
 }
